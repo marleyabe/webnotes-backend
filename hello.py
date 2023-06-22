@@ -2,7 +2,8 @@ from flask import Flask, request
 
 from db.functions import randomcode, create_note, read_note_by_code, update_note_by_code
 
-import markdown
+from markdown import markdown
+
 app = Flask(__name__)
 
 @app.route('/<code>', methods=['GET', 'POST', 'PUT'])
@@ -45,8 +46,6 @@ def random_code():
 
 @app.route('/markdowntohtml', methods=['POST'])
 def markdown_to_html():
-    from markdown import markdown
-    from flask import request
     content = request.args.get('message')
     html = markdown(content)
     return html
