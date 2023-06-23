@@ -1,10 +1,10 @@
 from flask import Flask, request
-
 from db.functions import randomcode, create_note, read_note_by_code, update_note_by_code
-
 from markdown import markdown
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/<code>', methods=['GET', 'POST', 'PUT'])
 def page(code):
@@ -46,17 +46,13 @@ def random_code():
 
 @app.route('/markdowntohtml', methods=['POST'])
 def markdown_to_html():
-    content = request.args.get('message')
+    content = request.headers.get('message')
     html = markdown(content)
-    return html
+    content = {
+        "message": html
+    }
+    return content
 
 @app.route('/', methods=['GET'])
 def index():
-    urls = {
-        "randomcode": "/randomcode - Get",
-        "create": "/<code> - Post",
-        "read": "/<code> - Get",
-        "update": "/<code> - Put"
-    }
-
-    return urls
+    return {'connect': "Success connection!"}
